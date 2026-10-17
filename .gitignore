@@ -1,0 +1,14 @@
+config.yaml
+__pycache__/
+*.pyc
+.venv/
+*.egg-info/
+dist/
+build/
+.idea/
+.vscode/
+.nexcode/
+.claude/
+.pytest_cache/
+CLAUDE.md
+docs/superpowers/
