@@ -7,6 +7,21 @@ from nexcode.tools.base import Tool
 if TYPE_CHECKING:
     from nexcode.cache import FileCache
 
+_CATALOG_SUMMARY_CHARS = 40
+
+
+def _description_summary(description: str) -> str:
+    """取描述的第一行，并截成短摘要，避免目录本身挤占上下文。"""
+    line = ""
+    for part in description.splitlines():
+        stripped = part.strip()
+        if stripped:
+            line = stripped
+            break
+    if len(line) <= _CATALOG_SUMMARY_CHARS:
+        return line
+    return line[:_CATALOG_SUMMARY_CHARS].rstrip() + "…"
+
 
 class ToolRegistry:
     def __init__(self) -> None:
@@ -51,6 +66,18 @@ class ToolRegistry:
             and name not in self._discovered
             and name not in self._disabled
         ]
+
+    def get_deferred_tool_catalog(self) -> list[str]:
+        """未加载工具的目录：名称加一行描述摘要，不含参数 Schema。"""
+        lines: list[str] = []
+        for name in self.get_deferred_tool_names():
+            tool = self._tools[name]
+            summary = _description_summary(getattr(tool, "description", "") or "")
+            if summary:
+                lines.append(f"{name}: {summary}")
+            else:
+                lines.append(name)
+        return lines
 
     def search_deferred(
         self, query: str, max_results: int, protocol: str = "anthropic"

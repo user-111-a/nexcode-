@@ -525,13 +525,14 @@ class Agent:
                         f"Hook [{note.hook_id}] {note.event}: {note.output}"
                     )
 
-            deferred_names = self.registry.get_deferred_tool_names()
-            if deferred_names:
+            deferred_catalog = self.registry.get_deferred_tool_catalog()
+            if deferred_catalog:
                 conversation.add_system_reminder(
                     "The following deferred tools are available via ToolSearch. "
-                    "Their schemas are NOT loaded - use ToolSearch with "
+                    "Each line is only the tool name and a one-line description summary. "
+                    "Their full schemas are NOT loaded - use ToolSearch with "
                     'query "select:<name>[,<name>...]" to load tool schemas before calling them:\n'
-                    + "\n".join(deferred_names)
+                    + "\n".join(deferred_catalog)
                 )
 
             tools = self.registry.get_all_schemas(self.protocol)
@@ -1193,13 +1194,14 @@ class Agent:
             if isinstance(compact_result, CompactEvent):
                 conversation.inject_environment(env_context)
 
-            deferred_names = self.registry.get_deferred_tool_names()
-            if deferred_names:
+            deferred_catalog = self.registry.get_deferred_tool_catalog()
+            if deferred_catalog:
                 conversation.add_system_reminder(
                     "The following deferred tools are available via ToolSearch. "
-                    "Their schemas are NOT loaded - use ToolSearch with "
+                    "Each line is only the tool name and a one-line description summary. "
+                    "Their full schemas are NOT loaded - use ToolSearch with "
                     'query "select:<name>[,<name>...]" to load tool schemas before calling them:\n'
-                    + "\n".join(deferred_names)
+                    + "\n".join(deferred_catalog)
                 )
 
             api_conv, _new_records = apply_tool_result_budget(

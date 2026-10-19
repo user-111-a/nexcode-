@@ -104,7 +104,7 @@ def benchmark_mcp_deferred_loading(num_mcp_tools: int = 100) -> dict[str, Any]:
 
     eager_schemas = full_registry.get_all_schemas("anthropic")
     deferred_schemas = deferred_registry.get_all_schemas("anthropic")
-    deferred_names_reminder = "\n".join(deferred_registry.get_deferred_tool_names())
+    deferred_names_reminder = "\n".join(deferred_registry.get_deferred_tool_catalog())
 
     eager_chars = len(json.dumps(eager_schemas, ensure_ascii=False))
     deferred_chars = len(json.dumps(deferred_schemas, ensure_ascii=False)) + len(

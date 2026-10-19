@@ -7,9 +7,9 @@
 ## 核心架构亮点
 
 ### 1. MCP 工具延迟加载 (Deferred Tool Loading)
-- **按需暴露 Schema**：MCP 工具注册时默认标记 `should_defer = True`，初始请求仅在 `<system-reminder>` 中向模型同步工具名称清单，不传递庞大的 JSON Schema。
+- **按需暴露 Schema**：MCP 工具注册时默认标记 `should_defer = True`，初始请求只在 `<system-reminder>` 中同步工具名称和一行描述摘要，不传递参数 Schema。
 - **动态检索激活**：模型按需调用 `ToolSearch`（支持 `select:<name>` 精确加载与关键词加权检索）动态解锁目标工具 Schema。
-- **实测收益**：在 100 个企业级 MCP 工具场景下，首轮 Prompt 工具定义 Token 占用由 **22,199 tokens 降至 1,949 tokens（降低 91.2%）**，彻底解决上下文窗口被工具定义挤占的问题。
+- **实测收益**：在 100 个企业级 MCP 工具场景下，首轮 Prompt 工具定义 Token 占用由 **22,199 tokens 降至 3,177 tokens（降低 85.7%）**。省下的是参数 Schema，名称和一行描述摘要仍然在，模型可以先判断要不要加载。
 
 ### 2. 两层渐进式上下文压缩引擎 (2-Layer Progressive Context Compression)
 - **Layer 1（工具结果预算 + Design B 决策冻结 + AST/Traceback 语义化裁剪）**：
